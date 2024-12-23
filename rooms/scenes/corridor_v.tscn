@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=4 uid="uid://dkqjddh082yji"]
+
+[ext_resource type="TileSet" uid="uid://bqjaergojg0e5" path="res://resources/test_set.tres" id="1_p6ttd"]
+[ext_resource type="Script" path="res://rooms/scripts/corridor_v.gd" id="2_myi5o"]
+
+[node name="corridor_v" type="TileMapLayer"]
+tile_map_data = PackedByteArray("AAACAAAAAAADAAAAAAACAAUAAAAEAAAAAAAAAAQAAAAAAAEAAAAAAAMAAAAAAAEAAAAAAAIAAAAAAAEAAAAAAAEAAAAAAAEAAAAEAAEAAAAAAAEAAAAEAAIAAAAAAAEAAAAEAAMAAAAAAAEAAAAEAAQAAAAAAAEAAAABAAQAAAAGAAAAAAACAAQAAAAGAAAAAAADAAQAAAAGAAAAAAADAAMAAAAGAAAAAAACAAMAAAAGAAAAAAABAAMAAAAGAAAAAAABAAIAAAAGAAAAAAACAAIAAAAGAAAAAAADAAIAAAAGAAAAAAADAAEAAAAGAAAAAAACAAEAAAAGAAAAAAABAAEAAAAGAAAAAAA=")
+tile_set = ExtResource("1_p6ttd")
+script = ExtResource("2_myi5o")

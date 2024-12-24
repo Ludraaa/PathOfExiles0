@@ -1,6 +1,6 @@
 extends Room
 
 func init():
-	size_x = 9
-	size_y = 9
+	size_x = 11
+	size_y = 11
 	super.init()

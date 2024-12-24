@@ -109,7 +109,59 @@ func generate_map():
 			#Delete the connector from the open connectors
 			place_room(room, connector, anchor)
 			filler_count += 1
-				
+	stuff_gaps()
+
+#Fills open ends and empty connections
+func stuff_gaps():
+	for cell in $Map.get_used_cells():
+		match $Map.get_cell_atlas_coords(cell):
+			Constants.connectorL_ph:
+				#Check if the tile left to the connector is empty or contains something
+				if $Map.get_cell_atlas_coords(cell - Vector2i(1, 0)) != Vector2i(5, 1):
+					var left_end = Constants.left_end.instantiate()
+					left_end.init()
+					place_room(left_end, cell, Vector2i(0, 4))
+				else:
+					var left_connector = Constants.left_connector.instantiate()
+					left_connector.init()
+					place_room(left_connector, cell, Vector2i(0, 4))
+			
+			Constants.connectorR_ph:
+				"""
+				if $Map.get_cell_atlas_coords(cell + Vector2i(1, 0)) != Vector2i(5, 1):
+					$Map.set_cell(cell, 0, Vector2i(4, 5))
+					$Map.set_cell(cell + Vector2i(0, 1), 0, Vector2i(4, 5))
+					$Map.set_cell(cell - Vector2i(0, 1), 0, Vector2i(4, 5))
+					$Map.set_cell(cell- Vector2i(0, 2), 0, Vector2i(4, 5))
+					$Map.set_cell(cell - Vector2i(0, 3), 0, Vector2i(4, 5))
+					$Map.set_cell(cell - Vector2i(0, 4), 0, Vector2i(4, 4))
+					$Map.set_cell(cell + Vector2i(0, 2), 0, Vector2i(4, 6))
+				else:
+					$Map.set_cell(cell + Vector2i(0, 1), 0, Vector2i(5, 2))
+					$Map.set_cell(cell - Vector2i(0, 1), 0, Vector2i(5, 0))
+					$Map.set_cell(cell, 0, Vector2i(5, 1))
+					$Map.set_cell(cell - Vector2i(0, 2), 0, Vector2i(3, 0))
+					$Map.set_cell(cell + Vector2i(0, 2), 0, Vector2i(1, 3))
+					"""
+			Constants.connectorU_ph:
+				"""
+				if $Map.get_cell_atlas_coords(cell - Vector2i(0, 1)) != Vector2i(5, 1):
+					$Map.set_cell(cell - Vector2i(0, -2), 0, Vector2i(1, 2))
+					$Map.set_cell(cell - Vector2i(0, -1), 0, Vector2i(1, 1))
+					$Map.set_cell(cell - Vector2i(0, 0), 0, Vector2i(1, 0))
+					
+					$Map.set_cell(cell + Vector2i(1, 2), 0, Vector2i(2, 2))
+					$Map.set_cell(cell - Vector2i(-1, -1), 0, Vector2i(2, 1))
+					$Map.set_cell(cell - Vector2i(-1, 0), 0, Vector2i(2, 0))
+					
+					$Map.set_cell(cell - Vector2i(1, -2), 0, Vector2i(0, 2))
+					$Map.set_cell(cell - Vector2i(1, -1), 0, Vector2i(0, 1))
+					$Map.set_cell(cell - Vector2i(1, 0), 0, Vector2i(0, 0))
+					
+					$Map.set_cell(cell + Vector2i(2, 0), 0, Vector2i(4, 4))
+					
+					$Map.set_cell(cell - Vector2i(2, 0), 0, Vector2i(3, 4))
+					"""
 func place_room(room, pos, anchor):
 	for x in range(pos.x - anchor.x, pos.x - anchor.x + room.size_x):
 		for y in range(pos.y - anchor.y, pos.y - anchor.y + room.size_y):

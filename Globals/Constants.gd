@@ -1,12 +1,10 @@
 extends Node
 
 #TileAtlasCoords mapped to room elements
-const walkable_ph = Vector2i(6, 0)
-const wall_ph = Vector2i(0, 1)
-const connectorL_ph = Vector2i(1, 0)
-const connectorR_ph = Vector2i(2, 0)
-const connectorU_ph = Vector2i(3, 0)
-const connectorD_ph = Vector2i(4, 0)
+const connectorL_ph = Vector2i(3, 10)
+const connectorR_ph = Vector2i(4, 10)
+const connectorU_ph = Vector2i(4, 9)
+const connectorD_ph = Vector2i(4, 8)
 
 enum ConnectionType {LEFT, RIGHT, UP, DOWN}
 const ConnectionTypeList = [ConnectionType.LEFT, ConnectionType.RIGHT, ConnectionType.UP, ConnectionType.DOWN]
@@ -25,3 +23,7 @@ var tjunktion_l = preload("res://rooms/scenes/tjunktion_l.tscn")
 var tjunktion_r = preload("res://rooms/scenes/tjunktion_r.tscn")
 var tjunktion_u = preload("res://rooms/scenes/tjunktion_u.tscn")
 var tjunktion_d = preload("res://rooms/scenes/tjunktion_d.tscn")
+
+#Preload paddings
+var left_end = preload("res://rooms/padding/left_end.tscn")
+var left_connector = preload("res://rooms/padding/left_connector.tscn")

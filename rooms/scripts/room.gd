@@ -12,6 +12,7 @@ extends TileMapLayer
 @export var tiles = []
 
 func init():
+	get_size()
 	assign_tiles()
 	get_tiles()
 
@@ -41,3 +42,14 @@ func get_tiles():
 		for y in range(size_y):
 			column.append(get_cell_atlas_coords(Vector2i(x, y)))
 		tiles.append(column)
+		
+func get_size():
+	var max_x = 0
+	var max_y = 0
+	for cell in get_used_cells():
+		if cell.x > max_x:
+			max_x = cell.x
+		if cell.y > max_y:
+			max_y = cell.y
+	size_x = max_x + 1
+	size_y = max_y + 1

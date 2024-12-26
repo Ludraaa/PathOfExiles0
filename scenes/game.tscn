@@ -1,9 +1,22 @@
-[gd_scene load_steps=3 format=3 uid="uid://ba6x5hakqri0y"]
+[gd_scene load_steps=4 format=3 uid="uid://ba6x5hakqri0y"]
 
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_ksw3t"]
 [ext_resource type="PackedScene" uid="uid://isjm1d1ej4ji" path="res://scenes/player.tscn" id="2_bahvj"]
+[ext_resource type="Texture2D" uid="uid://drqjqktc814ib" path="res://assets/background.png" id="3_44irm"]
 
 [node name="game" type="Node2D"]
 script = ExtResource("1_ksw3t")
 
 [node name="Player" parent="." instance=ExtResource("2_bahvj")]
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0.165488, 0.165488, 0.165488, 1)
+
+[node name="background" type="Sprite2D" parent="."]
+z_index = -1000
+z_as_relative = false
+position = Vector2(0.499998, 0.500001)
+scale = Vector2(8.5, 6.9)
+texture = ExtResource("3_44irm")
+region_enabled = true
+region_rect = Rect2(-5526.06, -3374.51, 10080.7, 4973.41)

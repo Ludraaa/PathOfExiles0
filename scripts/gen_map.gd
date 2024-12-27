@@ -1,24 +1,20 @@
 extends Node2D
 
 #Array containing all special rooms that should be in the map
-@export var rooms = []
+var rooms = []
 
 #Tilemap positions of left,right,up,down-facing connectors
-@export var open_connectors = [[],[],[],[]]
+var open_connectors = [[],[],[],[]]
 
 #Array of all filler rooms to be useable
-@export var room_lib = []
+var room_lib = []
 
 #Positions of all blocked spaces, where no room can cut in to
-@export var blocked = []
-
-#the maximum constraints of the map
-@export var map_size_x = 100
-@export var map_size_y = 100
-@export var minimum_filler_count = 30
+var blocked = []
 
 #Keeps track of the number of rooms currently
-@export var filler_count = 0
+var filler_count = 0
+
 
 #Position of the spawn tile
 var spawn_location : Vector2i
@@ -27,20 +23,40 @@ var spawn_location : Vector2i
 func _ready() -> void:
 	assemble_room_lib()
 	generate_map()
+	generate_fog()
+
+var weights = [
+	1,#corridor_h
+	1,#corridor_v
+	1,#corner_lu
+	1,#corner_ru
+	1,#corner_ld
+	1,#corner_rd
+	1,#tjunktion_l
+	1,#tjunktion_r
+	1,#tjunktion_u
+	1,#tjunktion_d
+	1,#four_way,
+	3,#complex_a
+	3,#Complex_b
+]
 
 #Gathers all the possible filler rooms into the array
 func assemble_room_lib():
-	room_lib.append(Constants.corridor_h)
-	room_lib.append(Constants.corridor_v)
-	room_lib.append(Constants.corner_lu)
-	room_lib.append(Constants.corner_ru)
-	room_lib.append(Constants.corner_ld)
-	room_lib.append(Constants.corner_rd)
-	room_lib.append(Constants.tjunktion_l)
-	room_lib.append(Constants.tjunktion_r)
-	room_lib.append(Constants.tjunktion_u)
-	room_lib.append(Constants.tjunktion_d)
-	room_lib.append(Constants.four_way)
+	room_lib.append(Constants.corridor_h_arr)
+	room_lib.append(Constants.corridor_v_arr)
+	room_lib.append(Constants.corner_lu_arr)
+	room_lib.append(Constants.corner_ru_arr)
+	room_lib.append(Constants.corner_ld_arr)
+	room_lib.append(Constants.corner_rd_arr)
+	room_lib.append(Constants.tjunktion_l_arr)
+	room_lib.append(Constants.tjunktion_r_arr)
+	room_lib.append(Constants.tjunktion_u_arr)
+	room_lib.append(Constants.tjunktion_d_arr)
+	room_lib.append(Constants.four_way_arr)
+	
+	room_lib.append(Constants.complex_a_arr)
+	room_lib.append(Constants.complex_b_arr)
 
 #Selects a random room from the room_lib and checks for a possible connection, as well as blocked tiles
 func select_random_filler(connection, anchor):
@@ -48,7 +64,7 @@ func select_random_filler(connection, anchor):
 
 	#Tries to find a matching room for the selected connector
 	for attempt in range(attempts):
-		var room = Globals.random_entry(room_lib).instantiate()
+		var room = Globals.random_entry(Globals.random_entry(room_lib, weights)).instantiate()
 		room.init()
 		if len(room.anchors[Constants.invConnectionTypeList[connection]]) > 0:
 			#Select a random connection in the correct direction and check for collision with other rooms
@@ -61,7 +77,7 @@ func select_random_filler(connection, anchor):
 func check_blocked(room, anchor, pos):
 	for x in range(pos.x - anchor.x, pos.x - anchor.x + room.size_x):
 		for y in range(pos.y - anchor.y, pos.y - anchor.y + room.size_y):
-			if Vector2i(x, y) in blocked or x > map_size_x or y > map_size_y or x < 0 or y < 0:
+			if Vector2i(x, y) in blocked or x > Config.map_size_x or y > Config.map_size_y or x < 0 or y < 0:
 				return false
 	return true
 
@@ -78,6 +94,8 @@ func select_connector(connection_type):
 	var connector
 	if pos_r > 5:
 		#Selects a random connector of the given direction
+		if (len(open_connectors[connection_type]) < 1):
+			return Vector2i(-1, -1)
 		connector = Globals.random_entry(open_connectors[connection_type])
 	else:
 		#Select the closest connector from the spawn point
@@ -87,19 +105,23 @@ func select_connector(connection_type):
 			if sqrt(((spawn_location.x - a.x) ** 2) + ((spawn_location.y - a.y) ** 2)) < distance:
 				closest_connector = a
 		connector = closest_connector
+		if !connector:
+			connector = Vector2i(-1, -1)
 	return connector
 
 func generate_map():
 	#Place the spawn at a random location
-	spawn_location = Vector2i(randi_range(map_size_x * 0.25, map_size_x * 0.75), randi_range(map_size_y * 0.25, map_size_y * 0.75))
-	var spawn = Constants.spawn_room.instantiate()
+	spawn_location = Vector2i(randi_range(Config.map_size_x * 0.25, Config.map_size_x * 0.75), randi_range(Config.map_size_y * 0.25, Config.map_size_y * 0.75))
+	var spawn = Globals.random_entry(Constants.spawn_room_arr).instantiate()
 	spawn.init()
 	place_room(spawn, spawn_location, Vector2i(0, 0))
 	
 	#Place filler rooms until the desired number is reached
-	while filler_count < minimum_filler_count:
+	while filler_count < Config.min_room_count:
 		var direction = select_connection()
 		var connector = select_connector(direction)
+		if connector == Vector2i(-1, -1):
+			continue
 		var ret = select_random_filler(direction, connector)
 		if len(ret) > 0:
 			var room = ret[0]
@@ -108,6 +130,7 @@ func generate_map():
 			place_room(room, connector, anchor)
 			filler_count += 1
 	stuff_gaps()
+	generate_special_objects()
 
 #Fills open ends and empty connections
 func stuff_gaps():
@@ -116,26 +139,26 @@ func stuff_gaps():
 			Constants.connectorL_ph:
 				#Check if the tile left to the connector is empty or contains something
 				if $Map.get_cell_atlas_coords(cell - Vector2i(1, 0)) != Vector2i(5, 1):
-					var left_end = Constants.left_end.instantiate()
+					var left_end = Globals.random_entry(Constants.left_end_arr).instantiate()
 					left_end.init()
 					place_room(left_end, cell, Vector2i(0, 4))
 				else:
-					var left_connector = Constants.left_connector.instantiate()
+					var left_connector = Globals.random_entry(Constants.left_connector_arr).instantiate()
 					left_connector.init()
 					place_room(left_connector, cell, Vector2i(0, 4))
 			
 			Constants.connectorR_ph:
 				if $Map.get_cell_atlas_coords(cell + Vector2i(1, 0)) != Vector2i(5,1):
-					var right_end = Constants.right_end.instantiate()
+					var right_end = Globals.random_entry(Constants.right_end_arr).instantiate()
 					right_end.init()
 					place_room(right_end, cell, Vector2i(0, 4))
 				else:
-					var left_connector = Constants.left_connector.instantiate()
+					var left_connector = Globals.random_entry(Constants.left_connector_arr).instantiate()
 					left_connector.init()
 					place_room(left_connector, cell, Vector2i(0, 4))
 			Constants.connectorU_ph:
 				if $Map.get_cell_atlas_coords(cell - Vector2i(0, 1)) != Vector2i(5,1):
-					var up_end = Constants.up_end.instantiate()
+					var up_end = Globals.random_entry(Constants.up_end_arr).instantiate()
 					up_end.init()
 					place_room(up_end, cell, Vector2i(1, 0))
 					$Map.set_cell(cell + Vector2i(2, 0), 0, Vector2i(4, 4))
@@ -143,16 +166,16 @@ func stuff_gaps():
 					blocked.append(cell + Vector2i(-2, 0))
 					blocked.append(cell + Vector2i(2, 0))
 				else:
-					var up_connector = Constants.up_connector.instantiate()
+					var up_connector = Globals.random_entry(Constants.up_connector_arr).instantiate()
 					up_connector.init()
 					place_room(up_connector, cell, Vector2i(2, 0))
 			Constants.connectorD_ph:
 				if $Map.get_cell_atlas_coords(cell + Vector2i(0, 1)) != Vector2i(5,1):
-					var down_end = Constants.down_end.instantiate()
+					var down_end = Globals.random_entry(Constants.down_end_arr).instantiate()
 					down_end.init()
 					place_room(down_end, cell, Vector2i(2, 0))
 				else:
-					var up_connector = Constants.up_connector.instantiate()
+					var up_connector = Globals.random_entry(Constants.up_connector_arr).instantiate()
 					up_connector.init()
 					place_room(up_connector, cell, Vector2i(2, 0))
 
@@ -169,3 +192,44 @@ func place_room(room, pos, anchor):
 	#Adds the new connectors to the list of connectors
 	for tile in room.connectors:
 		open_connectors[room.connectors[tile]].append(tile - anchor + pos)
+
+#Returns the tile on which the player should be spawned into the instance
+func get_player_spawn_point():
+	for x in range(spawn_location.x, spawn_location.x + 50):
+		for y in range(spawn_location.y, spawn_location.y + 50):
+			if $Map.get_cell_atlas_coords(Vector2i(x, y)) == Constants.player_spawn_point_ph:
+				return $Map.map_to_local(Vector2i(x, y))
+
+func generate_special_objects():
+	for cell in $Map.get_used_cells():
+		match $Map.get_cell_atlas_coords(cell):
+			Vector2i(1, 18):
+				var light = Constants.down_light.instantiate()
+				light.color = Color.RED
+				light.position = $Map.map_to_local(cell) + Vector2(0, 8)
+				$Map.add_child(light)
+			Vector2i(4, 18):
+				var light = Constants.down_light.instantiate()
+				light.color = Color.BLUE
+				light.position = $Map.map_to_local(cell) + Vector2(0, 8)
+				$Map.add_child(light)
+			Vector2i(7, 18):
+				var light = Constants.down_light.instantiate()
+				light.color = Color.GREEN
+				light.energy = 1
+				light.position = $Map.map_to_local(cell) + Vector2(0, 8)
+				$Map.add_child(light)
+
+#Fills the entire map with fog
+func generate_fog():
+	for x in range(Config.map_size_x):
+		for y in range (Config.map_size_y):
+			$Fog.set_cell(Vector2i(x, y), 0, Vector2i(0, 0))
+
+#Clears the fog in a radius around the player
+func clear_fog():
+	var player_tile_pos = $Map.local_to_map(Globals.player.position)
+	for x in range(player_tile_pos.x - Config.fog_clear_radius, player_tile_pos.x + Config.fog_clear_radius + 1):
+		for y in range(player_tile_pos.y - Config.fog_clear_radius, player_tile_pos.y + Config.fog_clear_radius + 1):
+			if sqrt(((x -player_tile_pos.x) ** 2) + ((y - player_tile_pos.y) ** 2)) < Config.fog_clear_radius:
+				$Fog.erase_cell(Vector2i(x, y))

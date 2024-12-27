@@ -1,5 +1,10 @@
 extends Node
 
+#References to important nodes
+var curr_map
+var minimap_map
+var player
+
 #Generates a random weighted entry of the given array and weights
 func random_entry(arr, weights = []):
 	#Generates a generic weight array in case the weights were not provided

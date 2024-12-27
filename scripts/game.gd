@@ -8,9 +8,11 @@ func _ready() -> void:
 
 func generate_map():
 	var map = generated_map.instantiate()
-	map.name = "map"
+	Globals.curr_map = map
 	add_child(map)
-	$Player.position = map.get_node("Map").map_to_local(map.spawn_location + Vector2i(5, 5))
+	$CanvasLayer/Minimap/SubViewportContainer/SubViewport/minimap_map.sketch_map()
+	$CanvasLayer/Minimap/SubViewportContainer/SubViewport/minimap_map.generate_fog()
+	$Player.position = map.get_player_spawn_point()
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

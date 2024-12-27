@@ -1,0 +1,33 @@
+[gd_scene load_steps=8 format=3 uid="uid://b3ho8py7uy5o4"]
+
+[ext_resource type="Texture2D" uid="uid://u6ho7v73872n" path="res://assets/fog.png" id="1_t8xa4"]
+[ext_resource type="Script" path="res://scripts/minimap_map.gd" id="2_2e4qo"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_uidcw"]
+texture = ExtResource("1_t8xa4")
+0:0/0 = 0
+0:0/0/modulate = Color(0.752941, 0.752941, 0.752941, 0.764706)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qx87p"]
+texture = ExtResource("1_t8xa4")
+0:0/0 = 0
+0:0/0/modulate = Color(0.278431, 0.278431, 0.278431, 0.627451)
+
+[sub_resource type="TileSet" id="TileSet_wt1jf"]
+sources/0 = SubResource("TileSetAtlasSource_uidcw")
+sources/1 = SubResource("TileSetAtlasSource_qx87p")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kyei6"]
+texture = ExtResource("1_t8xa4")
+0:0/0 = 0
+0:0/0/modulate = Color(0.733001, 0.733093, 0.709897, 1)
+
+[sub_resource type="TileSet" id="TileSet_i7jrt"]
+sources/0 = SubResource("TileSetAtlasSource_kyei6")
+
+[node name="minimap_map" type="TileMapLayer"]
+tile_set = SubResource("TileSet_wt1jf")
+script = ExtResource("2_2e4qo")
+
+[node name="Fog" type="TileMapLayer" parent="."]
+tile_set = SubResource("TileSet_i7jrt")

@@ -1,0 +1,59 @@
+[gd_scene load_steps=11 format=3 uid="uid://q8b8psfljotd"]
+
+[ext_resource type="Texture2D" uid="uid://djvy32lpru68w" path="res://assets/torch_sheet.png" id="1_5sn7k"]
+[ext_resource type="Script" path="res://scripts/torch.gd" id="2_jugso"]
+[ext_resource type="PackedScene" uid="uid://beg6s5biv6dma" path="res://scenes/flickering_light.tscn" id="3_v8stg"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7bfqt"]
+atlas = ExtResource("1_5sn7k")
+region = Rect2(0, 0, 64, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pyfg4"]
+atlas = ExtResource("1_5sn7k")
+region = Rect2(64, 0, 64, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fg53b"]
+atlas = ExtResource("1_5sn7k")
+region = Rect2(128, 0, 64, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_litjq"]
+atlas = ExtResource("1_5sn7k")
+region = Rect2(192, 0, 64, 128)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_14php"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7bfqt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pyfg4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fg53b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_litjq")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_lxyan"]
+noise_type = 3
+frequency = 0.1191
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_q8a5y"]
+seamless = true
+noise = SubResource("FastNoiseLite_lxyan")
+
+[node name="Torch" type="AnimatedSprite2D"]
+scale = Vector2(0.25, 0.25)
+sprite_frames = SubResource("SpriteFrames_14php")
+frame_progress = 0.0929389
+offset = Vector2(0, 16)
+script = ExtResource("2_jugso")
+
+[node name="flickering_light" parent="." instance=ExtResource("3_v8stg")]
+noise = SubResource("NoiseTexture2D_q8a5y")

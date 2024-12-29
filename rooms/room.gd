@@ -2,20 +2,21 @@ class_name Room
 extends TileMapLayer
 
 #Room dimensions
-@export var size_x : int
-@export var size_y : int
+var size_x : int
+var size_y : int
 
 #Possible connections to other tiles
-@export var anchors = [[],[],[],[]]
+var anchors = [[],[],[],[]]
 
 #List of all connectors, regardless of direction
-@export var connectors = {}
+var connectors = {}
 #List of all spaces blocked by this room
-@export var blocked = []
+var blocked = []
 
 #Contains the atlas coords to be able to place this room
-@export var tiles = []
-@export var props = []
+var tiles = []
+var props = []
+var props_atlas_index = []
 
 #Initializes the room
 #Godot's standard _ready function is not used since these scenes do not ever enter the tree
@@ -48,13 +49,16 @@ func assign_tiles():
 #Gets the atlas coords of every tile, so it can be placed down later
 func get_tiles():
 	for x in range(size_x):
-		var columnTiles = []
-		var columnProps = []
+		var column_tiles = []
+		var column_props = []
+		var column_props_atlas_index = []
 		for y in range(size_y):
-			columnTiles.append(get_cell_atlas_coords(Vector2i(x, y)))
-			columnProps.append($Props.get_cell_atlas_coords(Vector2i(x, y)))
-		tiles.append(columnTiles)
-		props.append(columnProps)
+			column_tiles.append(get_cell_atlas_coords(Vector2i(x, y)))
+			column_props.append($Props.get_cell_atlas_coords(Vector2i(x, y)))
+			column_props_atlas_index.append($Props.get_cell_source_id(Vector2i(x, y)))
+		tiles.append(column_tiles)
+		props.append(column_props)
+		props_atlas_index.append(column_props_atlas_index)
 
 #Gets dimensions of the room itself
 func get_size():

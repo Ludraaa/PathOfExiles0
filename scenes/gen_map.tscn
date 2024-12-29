@@ -1,28 +1,17 @@
-[gd_scene load_steps=6 format=3 uid="uid://c6ggdldacrl18"]
+[gd_scene load_steps=3 format=3 uid="uid://c6ggdldacrl18"]
 
 [ext_resource type="Script" path="res://scripts/gen_map.gd" id="1_i0ukh"]
 [ext_resource type="TileSet" uid="uid://bqjaergojg0e5" path="res://resources/test_set.tres" id="2_xajhw"]
-[ext_resource type="Texture2D" uid="uid://u6ho7v73872n" path="res://assets/fog.png" id="3_hpyjp"]
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2ft7e"]
-texture = ExtResource("3_hpyjp")
-0:0/0 = 0
-0:0/0/modulate = Color(1, 1, 1, 0)
-
-[sub_resource type="TileSet" id="TileSet_kwdis"]
-sources/0 = SubResource("TileSetAtlasSource_2ft7e")
 
 [node name="gen_map" type="Node2D"]
+y_sort_enabled = true
 script = ExtResource("1_i0ukh")
 
 [node name="Map" type="TileMapLayer" parent="."]
 z_index = -1
-y_sort_enabled = true
 tile_set = ExtResource("2_xajhw")
 
 [node name="Props" type="TileMapLayer" parent="."]
+z_index = 1
 y_sort_enabled = true
 tile_set = ExtResource("2_xajhw")
-
-[node name="Fog" type="TileMapLayer" parent="."]
-tile_set = SubResource("TileSet_kwdis")

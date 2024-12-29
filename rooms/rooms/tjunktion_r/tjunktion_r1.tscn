@@ -9,5 +9,5 @@ tile_set = ExtResource("1_fol0e")
 script = ExtResource("2_4kset")
 
 [node name="Props" type="TileMapLayer" parent="."]
-tile_map_data = PackedByteArray("AAABAAgAAQAAAAIAAAADAAIAAQADAAAAAAAFAAIAAQAJAAAAAAA=")
+tile_map_data = PackedByteArray("AAABAAgAAQAAAAIAAAADAAIAAQADAAAAAAAFAAIAAQAJAAAAAAAEAAIAAgALAAUAAAA=")
 tile_set = ExtResource("1_fol0e")

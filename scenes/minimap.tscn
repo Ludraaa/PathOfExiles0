@@ -7,15 +7,17 @@
 [node name="Minimap" type="ColorRect"]
 offset_left = 945.0
 offset_top = 6.0
-offset_right = 1145.0
-offset_bottom = 206.0
+offset_right = 1295.0
+offset_bottom = 356.0
 color = Color(1, 0.376471, 1, 0)
 script = ExtResource("1_0w3yu")
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+modulate = Color(1, 1, 1, 0.282353)
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 350.0
+offset_bottom = 350.0
+stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
 transparent_bg = true
@@ -29,6 +31,5 @@ zoom = Vector2(0.4, 0.4)
 [node name="minimap_map" parent="SubViewportContainer/SubViewport" instance=ExtResource("2_7vx7k")]
 
 [node name="player_marker" type="Sprite2D" parent="SubViewportContainer/SubViewport"]
-modulate = Color(1, 1, 1, 0.596078)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("3_reoys")

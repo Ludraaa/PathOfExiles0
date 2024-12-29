@@ -1,0 +1,19 @@
+[gd_scene load_steps=5 format=3 uid="uid://beg6s5biv6dma"]
+
+[ext_resource type="Texture2D" uid="uid://dr408eou5bkhd" path="res://resources/light.tres" id="1_dfcgl"]
+[ext_resource type="Script" path="res://scripts/flickering_light.gd" id="1_nrngb"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_68cnw"]
+noise_type = 3
+frequency = 0.2348
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_xpmhn"]
+seamless = true
+noise = SubResource("FastNoiseLite_68cnw")
+
+[node name="flickering_light" type="PointLight2D"]
+color = Color(0.799326, 0.470552, 0.166301, 1)
+texture = ExtResource("1_dfcgl")
+texture_scale = 3.0
+script = ExtResource("1_nrngb")
+noise = SubResource("NoiseTexture2D_xpmhn")

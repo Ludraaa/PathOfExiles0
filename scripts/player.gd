@@ -17,15 +17,15 @@ func _physics_process(delta: float) -> void:
 	mouse_pos = get_global_mouse_position()
 	
 	direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
-	position += speed * direction * delta
+	velocity = speed * direction
 	
 	if direction == Vector2(0, 0):
 		CURR_STATE = STATE.IDLE
 	else:
 		CURR_STATE = STATE.WALK
 	move_and_slide()
-	Globals.curr_map.clear_fog()
-	Globals.minimap_map.clear_fog()
+	
+	Globals.minimap_map.generate_nearby()
 	handle_animations()
 
 func handle_facing():

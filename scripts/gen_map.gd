@@ -23,7 +23,6 @@ var spawn_location : Vector2i
 func _ready() -> void:
 	assemble_room_lib()
 	generate_map()
-	generate_fog()
 
 var weights = [
 	1,#corridor_h
@@ -185,7 +184,7 @@ func place_room(room, pos, anchor):
 	for x in range(pos.x - anchor.x, pos.x - anchor.x + room.size_x):
 		for y in range(pos.y - anchor.y, pos.y - anchor.y + room.size_y):
 			$Map.set_cell(Vector2i(x, y), 0, room.tiles[x - pos.x + anchor.x][y - pos.y + anchor.y])
-			$Props.set_cell(Vector2i(x, y), 1, room.props[x - pos.x + anchor.x][y - pos.y + anchor.y])
+			$Props.set_cell(Vector2i(x, y), room.props_atlas_index[x - pos.x + anchor.x][y - pos.y + anchor.y], room.props[x - pos.x + anchor.x][y - pos.y + anchor.y])
 	#Adds the placed tiles to the array of blocked spaces
 	for tile in room.blocked:
 		blocked.append(tile - anchor + pos)
@@ -219,17 +218,10 @@ func generate_special_objects():
 				light.energy = 1
 				light.position = $Map.map_to_local(cell) + Vector2(0, 8)
 				$Map.add_child(light)
-
-#Fills the entire map with fog
-func generate_fog():
-	for x in range(Config.map_size_x):
-		for y in range (Config.map_size_y):
-			$Fog.set_cell(Vector2i(x, y), 0, Vector2i(0, 0))
-
-#Clears the fog in a radius around the player
-func clear_fog():
-	var player_tile_pos = $Map.local_to_map(Globals.player.position)
-	for x in range(player_tile_pos.x - Config.fog_clear_radius, player_tile_pos.x + Config.fog_clear_radius + 1):
-		for y in range(player_tile_pos.y - Config.fog_clear_radius, player_tile_pos.y + Config.fog_clear_radius + 1):
-			if sqrt(((x -player_tile_pos.x) ** 2) + ((y - player_tile_pos.y) ** 2)) < Config.fog_clear_radius:
-				$Fog.erase_cell(Vector2i(x, y))
+	for cell in $Props.get_used_cells():
+		match $Props.get_cell_atlas_coords(cell):
+			Vector2i(11, 5):#Wall torch
+				$Props.erase_cell(cell)
+				var torch = Constants.torch.instantiate()
+				torch.position = $Props.map_to_local(cell)
+				$Props.add_child(torch)

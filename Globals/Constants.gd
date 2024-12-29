@@ -33,13 +33,15 @@ var corridor_v1 = preload("res://rooms/rooms/corridor_v/corridor_v1.tscn")
 var corridor_v_arr = [corridor_v1]
 
 var corner_lu1 = preload("res://rooms/rooms/corner_lu/corner_lu1.tscn")
-var corner_lu_arr = [corner_lu1]
+var corner_lu2 = preload("res://rooms/rooms/corner_lu/corner_lu2.tscn")
+var corner_lu_arr = [corner_lu1, corner_lu2]
 
 var corner_ru1 = preload("res://rooms/rooms/corner_ru/corner_ru1.tscn")
 var corner_ru_arr = [corner_ru1]
 
 var corner_ld1 = preload("res://rooms/rooms/corner_ld/corner_ld1.tscn")
-var corner_ld_arr = [corner_ld1]
+var corner_ld2 = preload("res://rooms/rooms/corner_ld/corner_ld2.tscn")
+var corner_ld_arr = [corner_ld1, corner_ld2]
 
 var corner_rd1 = preload("res://rooms/rooms/corner_rd/corner_rd1.tscn")
 var corner_rd_arr = [corner_rd1]
@@ -62,10 +64,12 @@ var four_way_arr = [four_way1]
 #Preload all possible complexes
 var complex_a1 = preload("res://rooms/complexes/complex_a/complex_a1.tscn")
 var complex_a2 = preload("res://rooms/complexes/complex_a/complex_a2.tscn")
-var complex_a_arr = [complex_a1, complex_a2]
+var complex_a3 = preload("res://rooms/complexes/complex_a/complex_a3.tscn")
+var complex_a_arr = [complex_a1, complex_a2, complex_a3]
 
 var complex_b1 = preload("res://rooms/complexes/complex_b/complex_b1.tscn")
-var complex_b_arr = [complex_b1]
+var complex_b2 = preload("res://rooms/complexes/complex_b/complex_b2.tscn")
+var complex_b_arr = [complex_b1, complex_b2]
 
 #Preload paddings
 var left_end1 = preload("res://rooms/padding/left_end/left_end1.tscn")
@@ -87,3 +91,6 @@ var up_connector_arr = [up_connector1, up_connector2]
 
 var down_end1 = preload("res://rooms/padding/down_end/down_end1.tscn")
 var down_end_arr = [down_end1]
+
+#Preload other special objects
+var torch = preload("res://scenes/torch.tscn")

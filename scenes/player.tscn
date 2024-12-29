@@ -119,35 +119,36 @@ animations = [{
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_22vsx"]
 radius = 2.0
-height = 4.0
+height = 5.0
 
 [node name="Player" type="CharacterBody2D"]
+z_index = 1
 y_sort_enabled = true
+motion_mode = 1
+safe_margin = 2.0
 script = ExtResource("1_ekee8")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
-position = Vector2(0, 1.5)
+position = Vector2(0, 1.19209e-07)
 scale = Vector2(1.25, 1.25)
 sprite_frames = SubResource("SpriteFrames_lmgqn")
 animation = &"swordsman-walk"
+offset = Vector2(0, -7)
 
 [node name="terrain_collision" type="CollisionShape2D" parent="."]
-position = Vector2(0, 9)
+position = Vector2(0, -2)
 scale = Vector2(3, 0.8)
 shape = SubResource("CapsuleShape2D_22vsx")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, -23)
 zoom = Vector2(3.75, 3.75)
 position_smoothing_enabled = true
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
-position = Vector2(0, -9)
-energy = 1.5
+position = Vector2(0, -23)
+energy = 0.5
 texture = ExtResource("5_pcpg0")
 texture_scale = 1.25
 
 [node name="PlayerUI" parent="." instance=ExtResource("5_vddyj")]
-offset_left = -192.0
-offset_top = -107.0
-offset_right = -192.0
-offset_bottom = -107.0

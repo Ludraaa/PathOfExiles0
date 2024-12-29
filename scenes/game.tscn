@@ -1,17 +1,30 @@
 [gd_scene load_steps=5 format=3 uid="uid://ba6x5hakqri0y"]
 
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_ksw3t"]
-[ext_resource type="PackedScene" uid="uid://isjm1d1ej4ji" path="res://scenes/player.tscn" id="2_bahvj"]
 [ext_resource type="Texture2D" uid="uid://drqjqktc814ib" path="res://assets/background.png" id="3_44irm"]
 [ext_resource type="PackedScene" uid="uid://drnepry6oc8va" path="res://scenes/minimap.tscn" id="4_f3ys0"]
 
+[sub_resource type="GDScript" id="GDScript_50yfw"]
+script/source = "extends CanvasLayer
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+"
+
 [node name="game" type="Node2D"]
+process_mode = 1
+y_sort_enabled = true
 script = ExtResource("1_ksw3t")
 
-[node name="Player" parent="." instance=ExtResource("2_bahvj")]
-
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
-color = Color(0.442688, 0.442688, 0.442688, 1)
+color = Color(0.603976, 0.603976, 0.603976, 1)
 
 [node name="background" type="Sprite2D" parent="."]
 z_index = -1000
@@ -22,10 +35,30 @@ texture = ExtResource("3_44irm")
 region_enabled = true
 region_rect = Rect2(-5526.06, -3374.51, 10080.7, 4973.41)
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="MinimapContainer" type="CanvasLayer" parent="."]
 
-[node name="Minimap" parent="CanvasLayer" instance=ExtResource("4_f3ys0")]
-offset_left = 1572.0
-offset_top = 2.0
-offset_right = 1922.0
-offset_bottom = 352.0
+[node name="Minimap" parent="MinimapContainer" instance=ExtResource("4_f3ys0")]
+offset_left = 1570.0
+offset_top = 0.0
+offset_right = 1920.0
+offset_bottom = 350.0
+
+[node name="PauseMenu" type="CanvasLayer" parent="."]
+process_mode = 2
+script = SubResource("GDScript_50yfw")
+
+[node name="Label" type="Label" parent="PauseMenu"]
+offset_left = 936.0
+offset_top = 298.0
+offset_right = 1042.0
+offset_bottom = 321.0
+text = "Game paused"
+
+[node name="ResumeButton" type="Button" parent="PauseMenu"]
+offset_left = 921.0
+offset_top = 384.0
+offset_right = 1060.0
+offset_bottom = 415.0
+text = "Continue playing"
+
+[connection signal="pressed" from="PauseMenu/ResumeButton" to="." method="_on_resume_button_pressed"]

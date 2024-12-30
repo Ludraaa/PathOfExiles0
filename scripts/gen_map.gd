@@ -35,9 +35,10 @@ var weights = [
 	1,#tjunktion_r
 	1,#tjunktion_u
 	1,#tjunktion_d
-	1,#four_way,
+	1,#four_way
 	3,#complex_a
-	3,#Complex_b
+	3,#complex_b
+	3,#complex_c
 ]
 
 #Gathers all the possible filler rooms into the array
@@ -56,6 +57,7 @@ func assemble_room_lib():
 	
 	room_lib.append(Constants.complex_a_arr)
 	room_lib.append(Constants.complex_b_arr)
+	room_lib.append(Constants.complex_c_arr)
 
 #Selects a random room from the room_lib and checks for a possible connection, as well as blocked tiles
 func select_random_filler(connection, anchor):
@@ -225,3 +227,8 @@ func generate_special_objects():
 				var torch = Constants.torch.instantiate()
 				torch.position = $Props.map_to_local(cell)
 				$Props.add_child(torch)
+			Vector2i(12, 7):#Enemy
+				$Props.erase_cell(cell)
+				var skeleton = Constants.skeleton.instantiate()
+				skeleton.position = $Props.map_to_local(cell)
+				$Map.add_child(skeleton)

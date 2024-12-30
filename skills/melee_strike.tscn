@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bj0ohgknhl0a2"]
+
+[ext_resource type="Script" path="res://skills/melee_strike.gd" id="1_4jqp6"]
+
+[node name="MeleeStrike" type="Node2D"]
+script = ExtResource("1_4jqp6")

@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://w8lcgmj11myl"]
+
+[ext_resource type="TileSet" uid="uid://bqjaergojg0e5" path="res://resources/test_set.tres" id="1_wkubj"]
+[ext_resource type="Script" path="res://rooms/room.gd" id="2_e36et"]
+
+[node name="left_connector" type="TileMapLayer"]
+tile_map_data = PackedByteArray(0, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 8, 0, 4, 0, 0, 0, 0, 0, 5, 0, 0, 0, 5, 0, 2, 0, 0, 0, 0, 0, 6, 0, 0, 0, 1, 0, 3, 0, 0, 0)
+tile_set = ExtResource("1_wkubj")
+script = ExtResource("2_e36et")
+
+[node name="Props" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray(0, 0, 0, 0, 5, 0, 1, 0, 6, 0, 10, 0, 0, 0)
+tile_set = ExtResource("1_wkubj")

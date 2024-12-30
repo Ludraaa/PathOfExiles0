@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://cqo372rrwnx5m"]
+
+[ext_resource type="Script" path="res://scripts/healthbar.gd" id="1_fdqwq"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gssec"]
+bg_color = Color(0.106172, 0.106172, 0.106172, 1)
+corner_detail = 1
+
+[node name="Healthbar" type="Panel"]
+offset_right = 20.0
+offset_bottom = 2.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_gssec")
+script = ExtResource("1_fdqwq")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 20.0
+offset_bottom = 2.0
+color = Color(0.744029, 3.1646e-06, 1.05888e-06, 1)

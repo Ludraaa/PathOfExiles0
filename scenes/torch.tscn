@@ -49,10 +49,11 @@ seamless = true
 noise = SubResource("FastNoiseLite_lxyan")
 
 [node name="Torch" type="AnimatedSprite2D"]
+y_sort_enabled = true
 scale = Vector2(0.25, 0.25)
 sprite_frames = SubResource("SpriteFrames_14php")
 frame_progress = 0.0929389
-offset = Vector2(0, 16)
+offset = Vector2(-2, 16)
 script = ExtResource("2_jugso")
 
 [node name="flickering_light" parent="." instance=ExtResource("3_v8stg")]

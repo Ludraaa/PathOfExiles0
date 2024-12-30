@@ -1,0 +1,40 @@
+[gd_scene load_steps=6 format=3 uid="uid://dhmoo71qrvvbp"]
+
+[ext_resource type="Texture2D" uid="uid://tkxxtshwqgr2" path="res://assets/Tiny RPG Character Asset Pack v1.03 -Full 20 Characters/Characters(100x100)/Swordsman/Swordsman(Split Effects)/Swordsman-Attack01_Effect.png" id="1_81svq"]
+[ext_resource type="Script" path="res://skills/projectiles/melee_strike_proj.gd" id="1_m8sa8"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s1p0p"]
+atlas = ExtResource("1_81svq")
+region = Rect2(300, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l5cky"]
+atlas = ExtResource("1_81svq")
+region = Rect2(400, 0, 100, 100)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_uwmjy"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s1p0p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l5cky")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l5cky")
+}],
+"loop": false,
+"name": &"swordsman",
+"speed": 5.0
+}]
+
+[node name="melee_strike_proj" type="Area2D"]
+script = ExtResource("1_m8sa8")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+z_index = 5
+sprite_frames = SubResource("SpriteFrames_uwmjy")
+animation = &"swordsman"
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(24, 7, 33, -4, 30, -7, 20, -7, 7, 2, -2, 3, -9, 5, -14, 12, 6, 12, 18, 12)

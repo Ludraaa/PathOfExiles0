@@ -1,0 +1,132 @@
+[gd_scene load_steps=18 format=3 uid="uid://dmssl88bil5x"]
+
+[ext_resource type="Script" path="res://scripts/enemy.gd" id="1_nq22k"]
+[ext_resource type="Texture2D" uid="uid://dqwn50enydbh1" path="res://assets/Tiny RPG Character Asset Pack v1.03 -Full 20 Characters/Characters(100x100)/Skeleton/Skeleton/Skeleton-Idle.png" id="1_vq52b"]
+[ext_resource type="Texture2D" uid="uid://df5w7apady0ay" path="res://assets/Tiny RPG Character Asset Pack v1.03 -Full 20 Characters/Characters(100x100)/Skeleton/Skeleton/Skeleton-Death.png" id="2_qjxcq"]
+[ext_resource type="PackedScene" uid="uid://cqo372rrwnx5m" path="res://scenes/healthbar.tscn" id="4_8rbb8"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_87iwg"]
+radius = 12.0
+height = 24.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0i1w8"]
+atlas = ExtResource("2_qjxcq")
+region = Rect2(0, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4vk0s"]
+atlas = ExtResource("2_qjxcq")
+region = Rect2(100, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6oeot"]
+atlas = ExtResource("2_qjxcq")
+region = Rect2(200, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2paja"]
+atlas = ExtResource("2_qjxcq")
+region = Rect2(300, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ej6oc"]
+atlas = ExtResource("1_vq52b")
+region = Rect2(0, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u8rfc"]
+atlas = ExtResource("1_vq52b")
+region = Rect2(100, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x7oa7"]
+atlas = ExtResource("1_vq52b")
+region = Rect2(200, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ooxtu"]
+atlas = ExtResource("1_vq52b")
+region = Rect2(300, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2vl01"]
+atlas = ExtResource("1_vq52b")
+region = Rect2(400, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mrvy1"]
+atlas = ExtResource("1_vq52b")
+region = Rect2(500, 0, 100, 100)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4d1av"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0i1w8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4vk0s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6oeot")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2paja")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2paja")
+}],
+"loop": false,
+"name": &"skeleton_dying",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ej6oc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u8rfc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x7oa7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ooxtu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2vl01")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mrvy1")
+}],
+"loop": false,
+"name": &"skeleton_idle",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_utg0k"]
+radius = 2.0
+height = 4.0
+
+[node name="enemy" type="CharacterBody2D"]
+z_index = 1
+y_sort_enabled = true
+motion_mode = 1
+script = ExtResource("1_nq22k")
+
+[node name="Hitbox" type="Area2D" parent="."]
+
+[node name="HitboxShape" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(3, -9)
+shape = SubResource("CapsuleShape2D_87iwg")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -9)
+scale = Vector2(1.25, 1.25)
+sprite_frames = SubResource("SpriteFrames_4d1av")
+animation = &"skeleton_dying"
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+position = Vector2(0, -2)
+shape = SubResource("CapsuleShape2D_utg0k")
+
+[node name="Healthbar" parent="." instance=ExtResource("4_8rbb8")]
+offset_left = -7.0
+offset_top = -23.0
+offset_right = 13.0
+offset_bottom = -21.0
+
+[connection signal="area_entered" from="Hitbox" to="." method="_on_hitbox_area_entered"]
+[connection signal="mouse_entered" from="Hitbox" to="." method="_on_hitbox_mouse_entered"]
+[connection signal="mouse_exited" from="Hitbox" to="." method="_on_hitbox_mouse_exited"]

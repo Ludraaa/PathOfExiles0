@@ -36,7 +36,7 @@ var weights = [
 	1,#tjunktion_u
 	1,#tjunktion_d
 	1,#four_way
-	3,#complex_a
+	30,#complex_a
 	3,#complex_b
 	3,#complex_c
 ]
@@ -200,6 +200,14 @@ func get_player_spawn_point():
 		for y in range(spawn_location.y, spawn_location.y + 50):
 			if $Map.get_cell_atlas_coords(Vector2i(x, y)) == Constants.player_spawn_point_ph:
 				return $Map.map_to_local(Vector2i(x, y))
+
+func remove_nav_below_props():
+	for cell in $Props.get_used_cells():
+		var tile = $Map.get_cell_tile_data(cell)
+		if tile :
+			tile.set_navigation_polygon(0, null)
+
+
 
 func generate_special_objects():
 	for cell in $Map.get_used_cells():

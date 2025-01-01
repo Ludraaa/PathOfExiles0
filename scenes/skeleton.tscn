@@ -1,9 +1,10 @@
-[gd_scene load_steps=18 format=3 uid="uid://dmssl88bil5x"]
+[gd_scene load_steps=27 format=3 uid="uid://dmssl88bil5x"]
 
 [ext_resource type="Script" path="res://scripts/enemy.gd" id="1_nq22k"]
 [ext_resource type="Texture2D" uid="uid://dqwn50enydbh1" path="res://assets/Tiny RPG Character Asset Pack v1.03 -Full 20 Characters/Characters(100x100)/Skeleton/Skeleton/Skeleton-Idle.png" id="1_vq52b"]
 [ext_resource type="Texture2D" uid="uid://df5w7apady0ay" path="res://assets/Tiny RPG Character Asset Pack v1.03 -Full 20 Characters/Characters(100x100)/Skeleton/Skeleton/Skeleton-Death.png" id="2_qjxcq"]
 [ext_resource type="PackedScene" uid="uid://cqo372rrwnx5m" path="res://scenes/healthbar.tscn" id="4_8rbb8"]
+[ext_resource type="Texture2D" uid="uid://dpqdcthfgbfen" path="res://assets/Tiny RPG Character Asset Pack v1.03 -Full 20 Characters/Characters(100x100)/Skeleton/Skeleton/Skeleton-Walk.png" id="4_x7ino"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_87iwg"]
 radius = 12.0
@@ -49,6 +50,38 @@ region = Rect2(400, 0, 100, 100)
 atlas = ExtResource("1_vq52b")
 region = Rect2(500, 0, 100, 100)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_1edce"]
+atlas = ExtResource("4_x7ino")
+region = Rect2(0, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_14pmq"]
+atlas = ExtResource("4_x7ino")
+region = Rect2(100, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_epbxb"]
+atlas = ExtResource("4_x7ino")
+region = Rect2(200, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fuq1v"]
+atlas = ExtResource("4_x7ino")
+region = Rect2(300, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ttc15"]
+atlas = ExtResource("4_x7ino")
+region = Rect2(400, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1kipr"]
+atlas = ExtResource("4_x7ino")
+region = Rect2(500, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eyfwh"]
+atlas = ExtResource("4_x7ino")
+region = Rect2(600, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aiv1m"]
+atlas = ExtResource("4_x7ino")
+region = Rect2(700, 0, 100, 100)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_4d1av"]
 animations = [{
 "frames": [{
@@ -93,6 +126,35 @@ animations = [{
 "loop": false,
 "name": &"skeleton_idle",
 "speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1edce")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_14pmq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_epbxb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fuq1v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ttc15")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1kipr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eyfwh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aiv1m")
+}],
+"loop": false,
+"name": &"skeleton_walk",
+"speed": 5.0
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_utg0k"]
@@ -103,30 +165,49 @@ height = 4.0
 z_index = 1
 y_sort_enabled = true
 motion_mode = 1
+wall_min_slide_angle = 0.0
 script = ExtResource("1_nq22k")
 
 [node name="Hitbox" type="Area2D" parent="."]
+collision_mask = 3
 
 [node name="HitboxShape" type="CollisionShape2D" parent="Hitbox"]
-position = Vector2(3, -9)
+position = Vector2(0, -9)
 shape = SubResource("CapsuleShape2D_87iwg")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
-position = Vector2(0, -9)
+position = Vector2(-2.38419e-07, -9)
 scale = Vector2(1.25, 1.25)
 sprite_frames = SubResource("SpriteFrames_4d1av")
-animation = &"skeleton_dying"
+animation = &"skeleton_walk"
 
 [node name="Collision" type="CollisionShape2D" parent="."]
 position = Vector2(0, -2)
+scale = Vector2(2.5, 2.5)
 shape = SubResource("CapsuleShape2D_utg0k")
 
 [node name="Healthbar" parent="." instance=ExtResource("4_8rbb8")]
-offset_left = -7.0
+offset_left = -10.0
 offset_top = -23.0
-offset_right = 13.0
+offset_right = 10.0
 offset_bottom = -21.0
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+path_desired_distance = 4.0
+target_desired_distance = 8.0
+path_postprocessing = 1
+neighbor_distance = 64.0
+
+[node name="NavTimer" type="Timer" parent="."]
+wait_time = 0.25
+autostart = true
+
+[node name="PlayerCast" type="RayCast2D" parent="."]
+target_position = Vector2(0, 0)
+collision_mask = 3
+collide_with_areas = true
 
 [connection signal="area_entered" from="Hitbox" to="." method="_on_hitbox_area_entered"]
 [connection signal="mouse_entered" from="Hitbox" to="." method="_on_hitbox_mouse_entered"]
 [connection signal="mouse_exited" from="Hitbox" to="." method="_on_hitbox_mouse_exited"]
+[connection signal="timeout" from="NavTimer" to="." method="_on_nav_timer_timeout"]

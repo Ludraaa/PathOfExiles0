@@ -8,7 +8,7 @@ const map_size_x = 100
 const map_size_y = 100
 
 #min number of filler rooms
-const min_room_count = 40
+const min_room_count = 3
 #Minimap
 var minimap_pos = Vector2(1570, 0)
 var minimap_zoom_factor = Vector2(0.4, 0.4)

@@ -381,6 +381,7 @@ height = 5.0
 z_index = 1
 y_sort_enabled = true
 motion_mode = 1
+wall_min_slide_angle = 0.0
 safe_margin = 2.0
 script = ExtResource("1_ekee8")
 
@@ -410,3 +411,9 @@ texture = ExtResource("5_pcpg0")
 texture_scale = 1.25
 
 [node name="PlayerUI" parent="." instance=ExtResource("5_vddyj")]
+
+[node name="RayCast" type="RayCast2D" parent="."]
+position = Vector2(0, -10)
+target_position = Vector2(0, 0)
+collision_mask = 2
+collide_with_areas = true

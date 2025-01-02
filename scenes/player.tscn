@@ -1,4 +1,4 @@
-[gd_scene load_steps=59 format=3 uid="uid://isjm1d1ej4ji"]
+[gd_scene load_steps=66 format=3 uid="uid://isjm1d1ej4ji"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_ekee8"]
 [ext_resource type="Texture2D" uid="uid://dsmi2a33qo5ce" path="res://assets/Tiny RPG Character Asset Pack v1.03 -Full 20 Characters/Characters(100x100)/Swordsman/Swordsman/Swordsman-Idle.png" id="2_kgd0c"]
@@ -6,8 +6,10 @@
 [ext_resource type="Texture2D" uid="uid://if64dv8avgav" path="res://assets/Tiny RPG Character Asset Pack v1.03 -Full 20 Characters/Characters(100x100)/Swordsman/Swordsman/Swordsman-Walk.png" id="3_hmp2x"]
 [ext_resource type="Texture2D" uid="uid://n3mmibs6pwfd" path="res://assets/Tiny RPG Character Asset Pack v1.03 -Full 20 Characters/Characters(100x100)/Swordsman/Swordsman/Swordsman-Attack02.png" id="3_t434i"]
 [ext_resource type="Texture2D" uid="uid://6rmcavnw0rgu" path="res://assets/Tiny RPG Character Asset Pack v1.03 -Full 20 Characters/Characters(100x100)/Swordsman/Swordsman/Swordsman-Attack3.png" id="4_p0op6"]
+[ext_resource type="Texture2D" uid="uid://cj0qjo4v6163x" path="res://assets/Tiny RPG Character Asset Pack v1.03 -Full 20 Characters/Characters(100x100)/Swordsman/Swordsman/Swordsman-Death.png" id="5_h2xvy"]
 [ext_resource type="Texture2D" uid="uid://dr408eou5bkhd" path="res://resources/light.tres" id="5_pcpg0"]
 [ext_resource type="PackedScene" uid="uid://qllqn6woeypq" path="res://scenes/player_ui.tscn" id="5_vddyj"]
+[ext_resource type="PackedScene" uid="uid://cqo372rrwnx5m" path="res://scenes/healthbar.tscn" id="9_hkeov"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hulwt"]
 atlas = ExtResource("2_qv8c5")
@@ -144,6 +146,22 @@ region = Rect2(1000, 0, 100, 100)
 [sub_resource type="AtlasTexture" id="AtlasTexture_dn3oj"]
 atlas = ExtResource("4_p0op6")
 region = Rect2(1100, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ki6dk"]
+atlas = ExtResource("5_h2xvy")
+region = Rect2(0, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2pgvf"]
+atlas = ExtResource("5_h2xvy")
+region = Rect2(100, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4k6hy"]
+atlas = ExtResource("5_h2xvy")
+region = Rect2(200, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pditt"]
+atlas = ExtResource("5_h2xvy")
+region = Rect2(300, 0, 100, 100)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ie4pj"]
 atlas = ExtResource("2_kgd0c")
@@ -322,6 +340,23 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_ki6dk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2pgvf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4k6hy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pditt")
+}],
+"loop": false,
+"name": &"swordsman-dying",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_ie4pj")
 }, {
 "duration": 1.0,
@@ -377,6 +412,8 @@ animations = [{
 radius = 2.0
 height = 5.0
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_ao0ne"]
+
 [node name="Player" type="CharacterBody2D"]
 z_index = 1
 y_sort_enabled = true
@@ -389,9 +426,7 @@ script = ExtResource("1_ekee8")
 position = Vector2(0, 1.19209e-07)
 scale = Vector2(1.25, 1.25)
 sprite_frames = SubResource("SpriteFrames_lmgqn")
-animation = &"swordsman-attack1"
-frame = 6
-frame_progress = 1.0
+animation = &"swordsman-dying"
 offset = Vector2(0, -7)
 
 [node name="terrain_collision" type="CollisionShape2D" parent="."]
@@ -417,3 +452,19 @@ position = Vector2(0, -10)
 target_position = Vector2(0, 0)
 collision_mask = 2
 collide_with_areas = true
+
+[node name="Hitbox" type="Area2D" parent="."]
+
+[node name="HitboxShape" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(2, -10)
+scale = Vector2(1.04298, 1.04298)
+shape = SubResource("CircleShape2D_ao0ne")
+
+[node name="Healthbar" parent="." instance=ExtResource("9_hkeov")]
+z_index = 1
+offset_left = -10.0
+offset_top = -27.0
+offset_right = 10.0
+offset_bottom = -25.0
+
+[connection signal="area_entered" from="Hitbox" to="." method="_on_hitbox_area_entered"]
